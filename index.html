@@ -1,0 +1,725 @@
+	
+  ├── index.html <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>for my babii :></title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background-color: #faf4ee;
+      background-image: radial-gradient(#e8d5c8 1px, transparent 1px), radial-gradient(#e8d5c8 1px, #faf4ee 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      font-family: "Quicksand", sans-serif;
+      color: #5c4a42;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+    .sparkle-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .floating-heart {
+      position: absolute; color: #f4c2c2; opacity: 0.5;
+      animation: float 8s ease-in-out infinite; user-select: none; font-size: 20px;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+    .scrapbook-container { max-width: 760px; margin: 0 auto; padding: 20px 16px 70px; position: relative; z-index: 1; }
+
+    /* MUSIC PLAYER */
+    .music-player {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #fffdf9; border: 2px solid #e5c3b2; border-radius: 50px;
+      padding: 12px 16px; box-shadow: 0 6px 20px rgba(168, 137, 122, 0.2);
+      z-index: 100; display: flex; align-items: center; gap: 10px;
+      font-family: "Quicksand", sans-serif;
+    }
+    .music-toggle {
+      background: none; border: none; font-size: 1.5rem;
+      cursor: pointer; color: #8b5e52; transition: transform 0.2s ease;
+    }
+    .music-toggle:hover { transform: scale(1.15); }
+    .music-info { font-size: 0.85rem; color: #9c7a6e; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    #cover-screen {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center; padding: 20px;
+    }
+    .cover-card {
+      background: #fffdf9; border: 2px dashed #e5c3b2; border-radius: 24px;
+      padding: 45px 28px; box-shadow: 0 12px 30px rgba(168, 137, 122, 0.14);
+      max-width: 480px; width: 100%; position: relative; transform: rotate(-1deg);
+    }
+    .tape {
+      position: absolute; width: 90px; height: 26px;
+      background-color: rgba(243, 226, 205, 0.75); box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.4); z-index: 2;
+    }
+    .tape-top-center { top: -12px; left: 50%; transform: translateX(-50%) rotate(1deg); }
+    .tape-top-left { top: -10px; left: 15px; transform: rotate(-8deg); }
+    .tape-top-right { top: -10px; right: 15px; transform: rotate(6deg); }
+    .cover-title { font-family: "Caveat", cursive; font-size: 3.4rem; color: #8b5e52; margin-bottom: 8px; font-weight: 700; }
+    .cover-subtitle { font-size: 1rem; color: #9c7a6e; margin-bottom: 30px; }
+    .btn-cute {
+      background-color: #f7d6cd; color: #6e473b; border: none; padding: 13px 30px;
+      font-family: "Quicksand", sans-serif; font-size: 1rem; font-weight: 700; border-radius: 50px;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(230, 169, 154, 0.4); transition: all 0.3s ease;
+    }
+    .btn-cute:hover { background-color: #f2c4b7; transform: translateY(-2px) scale(1.02); }
+
+    #main-scrapbook { display: none; opacity: 0; transition: opacity 0.8s ease; }
+    .scrapbook-section { margin-bottom: 55px; position: relative; }
+    .section-header { text-align: center; margin-bottom: 22px; }
+    .section-title {
+      font-family: "Caveat", cursive; font-size: 2.4rem; color: #8b5e52;
+      display: inline-block; position: relative; line-height: 1.2;
+    }
+    .section-title::after {
+      content: "♡"; position: absolute; right: -25px; top: -4px;
+      font-size: 1.2rem; color: #e29b8c;
+    }
+    .paper-card {
+      background-color: #fffdf9; border-radius: 18px; padding: 28px;
+      box-shadow: 0 5px 17px rgba(140, 110, 95, 0.08); position: relative;
+      border: 1px solid #f2e3d8; margin-bottom: 18px; word-wrap: break-word;
+      white-space: pre-wrap; font-size: 1.02rem;
+    }
+    .handwritten-note { background-color: #fff9e6; border: 1px solid #f0e2b6; transform: rotate(-0.4deg); }
+    .special-letter {
+      background: #fffdf9; border: 2px solid #f5dcd3; border-radius: 20px;
+      padding: 34px 28px; font-size: 1.05rem; box-shadow: 0 8px 24px rgba(184, 139, 126, 0.12);
+      line-height: 1.9; position: relative; white-space: pre-wrap;
+    }
+    .divider-doodle { text-align: center; margin: 28px 0; color: #d6afa3; font-size: 1.1rem; letter-spacing: 6px; }
+    .cards-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .side-card {
+      background-color: #faf0ec; border: 1px dashed #e5c3b2;
+      border-radius: 17px; padding: 23px; position: relative;
+    }
+    .side-card-title { font-family: "Caveat", cursive; font-size: 1.8rem; color: #9e5b4b; margin-bottom: 8px; }
+    .photo-grid { display: grid; grid-template-columns: 1fr; gap: 32px; margin-top: 15px; }
+    @media (min-width: 600px) { .photo-grid { grid-template-columns: 1fr 1fr; } }
+    .polaroid {
+      background: #ffffff; padding: 14px 14px 22px; box-shadow: 0 7px 20px rgba(110, 85, 75, 0.12);
+      border-radius: 4px; position: relative; transition: transform 0.3s ease;
+    }
+    .polaroid:nth-child(odd) { transform: rotate(-2deg); }
+    .polaroid:nth-child(even) { transform: rotate(2deg); }
+    .polaroid:hover { transform: rotate(0deg) scale(1.025); z-index: 5; }
+    .polaroid-img-wrapper { width: 100%; height: 270px; overflow: hidden; background-color: #f4ebe1; border-radius: 2px; }
+    .polaroid-img-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .polaroid-caption { margin-top: 14px; text-align: center; font-family: "Caveat", cursive; font-size: 1.35rem; color: #6e473b; line-height: 1.3; }
+    .ending-card { text-align: center; padding: 45px 22px; background: #fff8f5; border-radius: 24px; border: 1px dashed #e2b4a5; margin-top: 65px; }
+    .ending-title { font-family: "Caveat", cursive; font-size: 2.6rem; color: #8b5e52; margin-bottom: 7px; }
+    .ending-sub { font-size: 0.95rem; color: #9c7a6e; margin-bottom: 25px; }
+    .footer-love { text-align: center; margin-top: 40px; font-family: "Caveat", cursive; font-size: 1.9rem; color: #b86b58; }
+    @media (max-width: 500px) {
+      .cover-title { font-size: 2.8rem; }
+      .section-title { font-size: 2.05rem; }
+      .paper-card, .special-letter { padding: 23px 20px; }
+      .polaroid-img-wrapper { height: 250px; }
+      .music-player { bottom: 15px; right: 15px; padding: 10px 14px; }
+      .music-info { max-width: 100px; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sparkle-bg">
+    <div class="floating-heart" style="left:10%; animation-delay:0s;">✦</div>
+    <div class="floating-heart" style="left:25%; animation-delay:2s;">♡</div>
+    <div class="floating-heart" style="left:45%; animation-delay:4s;">✦</div>
+    <div class="floating-heart" style="left:70%; animation-delay:1s;">♡</div>
+    <div class="floating-heart" style="left:85%; animation-delay:3s;">✦</div>
+  </div>
+
+  <!-- AUDIO ELEMENT -->
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- MUSIC PLAYER BUTTON -->
+  <div class="music-player">
+    <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">🎵</button>
+    <div class="music-info">now playing...</div>
+  </div>
+
+  <div class="scrapbook-container">
+    <div id="cover-screen">
+      <div class="cover-card">
+        <div class="tape tape-top-center"></div>
+        <h1 class="cover-title">for my babii :></h1>
+        <p class="cover-subtitle">a little place i made just for you hehe</p>
+        <button class="btn-cute" onclick="openScrapbook()">open this :></button>
+      </div>
+    </div>
+
+    <div id="main-scrapbook">
+            <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">before you start reading hehe</h2>
+        </div>
+
+        <div class="paper-card handwritten-note">
+          babii, if you're reading thiss, i hope you know na i made this little place just for you hehe
+          
+          i know this isn't some super fancy thing, pero i wanted to make something that feels like us, something na pwede mong balikan whenever you want to remember the little things we've shared :>
+          
+          there's a lot of things i don't always say properly when we're talking, kaya i put some of them here instead hehe
+          
+          i hope habang binabasa mo 'to, maramdaman mo kahit konti kung gaano kita ka-appreciate, kung gaano ako kasaya na nakilala kita, and kung gaano ka kahalaga sa akin :>
+          
+          so ayun babii, take your time reading thiss, kasi every little part of this was made with you in mind
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">little things about you</h2>
+        </div>
+
+        <div class="paper-card">
+          i love your little habits, your random stories, your way of talking, your pagiging makulit, and even those tiny things you do without realizing na napapangiti mo ako hehe
+          
+          sometimes it's not even the big things that stay with me, it's the small ones
+          
+          yung way mo magkwento ng random things, yung little reactions mo, yung moments na bigla kang may chika, yung times na tahimik ka lang, and even the way you get excited about something
+          
+          i don't think you always realize how much those little things make you special to me
+          
+          you don't have to do something amazing just to make me happy babii, kasi ikaw mismo, being yourself, is already something i appreciate so much :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">things i notice without telling you</h2>
+        </div>
+
+        <div class="paper-card">
+          there are so many things about you that i notice kahit hindi ko sabihin agad hehe
+          
+          i notice when you're extra happy, when you're tired, when your replies feel a little different, when you're excited about something, and even when you're trying to act like you're okay
+          
+          i notice the effort you put into conversations, the way you remember little things, the way you listen, and the way you try to understand me
+          
+          sometimes you might think na maliit lang yung mga ginagawa mo, pero babii, those are exactly the things that make me appreciate you more
+          
+          i don't need you to be perfect for me to notice you
+          
+          i just love getting to know you, little by little, and learning the different sides of you that you let me see :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">why i choose us</h2>
+        </div>
+
+        <div class="special-letter">
+          i choose us because being with you feels like something worth taking care of
+          
+          not because everything is always easy, and not because we never misunderstand each other, but because even when things get difficult, i still believe that we can talk, listen, understand, and find our way back to each other
+          
+          i choose us because i like the person i become when i'm learning with you
+          
+          i choose us because i don't want our relationship to only exist during the easy days
+          
+          i want to know you through the happy days, the quiet days, the random days, and even the days when things don't feel perfect
+          
+          and babii, i hope you know that choosing us doesn't mean expecting perfection from either of us
+          
+          it means choosing patience, honesty, understanding, and effort
+          
+          araw araw, in our own little ways, i hope we keep choosing each other :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">the different sides of you</h2>
+        </div>
+
+        <div class="cards-grid">
+
+          <div class="side-card">
+            <h3 class="side-card-title">your happy side</h3>
+            <p>
+              i love seeing you genuinely happy babii, lalo na kapag excited ka magkwento or may bagay na nagpapasaya sayo hehe
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your makulit side</h3>
+            <p>
+              your random jokes, pang-aasar, little kulit moments, and all those things that make our conversations feel like ours :>
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your quiet side</h3>
+            <p>
+              i appreciate this side of you too, because you don't always have to fill the silence or explain everything for me to stay
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your vulnerable side</h3>
+            <p>
+              thank you for trusting me enough to let me see the parts of you that aren't always easy to show, babii :<
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">our little moments</h2>
+        </div>
+
+        <div class="photo-grid">
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="1787575078122.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              one of those little moments i wish i could keep forever :>
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="IMG_20260715_130932_329.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              just us being us hehe
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="Messenger_creation_5DECDCD6-7F5F-480D-83E3-F9F5CD1E276E.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              somehow, even the random moments become special when it's with you
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="Messenger_creation_38DCF4B3-7DD4-4A41-911E-9D3C30EB1F41.jpeg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              another little memory that i'm keeping close to my heart :>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">the little things i never want us to lose</h2>
+        </div>
+
+        <div class="paper-card">
+          i never want us to stop laughing at random things, sending each other nonsense, sharing little stories about our day, or getting excited over the smallest things hehe
+          
+          i never want us to stop asking how each other is doing, even when the answer is just "okay lang"
+          
+          i never want us to stop listening to each other
+          
+          i never want us to stop being gentle with each other, especially during moments when one of us is having a harder day
+          
+          and most of all, i never want us to stop making each other feel like we are worth listening to, worth understanding, and worth choosing :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">what you mean to me</h2>
+        </div>
+
+        <div class="special-letter">
+          babii, you mean so much more to me than i can properly put into words
+          
+          you're someone i can laugh with, talk to, yap with, and share little pieces of my day with
+          
+          you're someone whose words actually reach me
+          
+          and i think that's one of the things i appreciate most
+          
+          your efforts don't have to be huge for me to notice them
+          
+          sometimes a simple reassurance, a random message, a little reminder, or just knowing that you're there can mean more than you realize
+          
+          i hope you know that i see those things
+          
+          i appreciate you for them
+          
+          and i appreciate you for simply being you
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">for us</h2>
+        </div>
+
+        <div class="ending-card">
+
+          <div class="ending-title">for my babii :></div>
+
+          <div class="ending-sub">
+            a little reminder of how much i appreciate you
+          </div>
+
+          <p>
+            if someday we look back at this little website, i hope we smile at how simple everything was
+            <br><br>
+            
+            i hope we remember the random conversations, the laughter, the little misunderstandings we learned from, the moments we made each other feel better, and all the ordinary days that somehow became special because we shared them
+            <br><br>
+            
+            i don't know exactly what every tomorrow will look like, but i know that right now, i'm genuinely grateful that you're here
+            <br><br>
+            
+            thank you for being part of my days, for listening to me, for understanding me, for trusting me, and for letting me know the different sides of you
+            <br><br>
+            
+            i hope we keep growing together without rushing each other, keep learning how to love each other better, and keep choosing kindness even when things get difficult
+            <br><br>
+            
+            and babii, whenever you forget how much you matter, i hope this little place reminds you that someone noticed all those little things about you
+            <br><br>
+            
+            i lovee youu so muchh babiii :>>
+          </p>
+
+        </div>
+
+        <div class="footer-love">
+          always your kakampi :>
+        </div>
+
+      </section>      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">before you start reading hehe</h2>
+        </div>
+
+        <div class="paper-card handwritten-note">
+          babii, if you're reading thiss, i hope you know na i made this little place just for you hehe
+          
+          i know this isn't some super fancy thing, pero i wanted to make something that feels like us, something na pwede mong balikan whenever you want to remember the little things we've shared :>
+          
+          there's a lot of things i don't always say properly when we're talking, kaya i put some of them here instead hehe
+          
+          i hope habang binabasa mo 'to, maramdaman mo kahit konti kung gaano kita ka-appreciate, kung gaano ako kasaya na nakilala kita, and kung gaano ka kahalaga sa akin :>
+          
+          so ayun babii, take your time reading thiss, kasi every little part of this was made with you in mind
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">little things about you</h2>
+        </div>
+
+        <div class="paper-card">
+          i love your little habits, your random stories, your way of talking, your pagiging makulit, and even those tiny things you do without realizing na napapangiti mo ako hehe
+          
+          sometimes it's not even the big things that stay with me, it's the small ones
+          
+          yung way mo magkwento ng random things, yung little reactions mo, yung moments na bigla kang may chika, yung times na tahimik ka lang, and even the way you get excited about something
+          
+          i don't think you always realize how much those little things make you special to me
+          
+          you don't have to do something amazing just to make me happy babii, kasi ikaw mismo, being yourself, is already something i appreciate so much :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">things i notice without telling you</h2>
+        </div>
+
+        <div class="paper-card">
+          there are so many things about you that i notice kahit hindi ko sabihin agad hehe
+          
+          i notice when you're extra happy, when you're tired, when your replies feel a little different, when you're excited about something, and even when you're trying to act like you're okay
+          
+          i notice the effort you put into conversations, the way you remember little things, the way you listen, and the way you try to understand me
+          
+          sometimes you might think na maliit lang yung mga ginagawa mo, pero babii, those are exactly the things that make me appreciate you more
+          
+          i don't need you to be perfect for me to notice you
+          
+          i just love getting to know you, little by little, and learning the different sides of you that you let me see :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">why i choose us</h2>
+        </div>
+
+        <div class="special-letter">
+          i choose us because being with you feels like something worth taking care of
+          
+          not because everything is always easy, and not because we never misunderstand each other, but because even when things get difficult, i still believe that we can talk, listen, understand, and find our way back to each other
+          
+          i choose us because i like the person i become when i'm learning with you
+          
+          i choose us because i don't want our relationship to only exist during the easy days
+          
+          i want to know you through the happy days, the quiet days, the random days, and even the days when things don't feel perfect
+          
+          and babii, i hope you know that choosing us doesn't mean expecting perfection from either of us
+          
+          it means choosing patience, honesty, understanding, and effort
+          
+          araw araw, in our own little ways, i hope we keep choosing each other :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">the different sides of you</h2>
+        </div>
+
+        <div class="cards-grid">
+
+          <div class="side-card">
+            <h3 class="side-card-title">your happy side</h3>
+            <p>
+              i love seeing you genuinely happy babii, lalo na kapag excited ka magkwento or may bagay na nagpapasaya sayo hehe
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your makulit side</h3>
+            <p>
+              your random jokes, pang-aasar, little kulit moments, and all those things that make our conversations feel like ours :>
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your quiet side</h3>
+            <p>
+              i appreciate this side of you too, because you don't always have to fill the silence or explain everything for me to stay
+            </p>
+          </div>
+
+          <div class="side-card">
+            <h3 class="side-card-title">your vulnerable side</h3>
+            <p>
+              thank you for trusting me enough to let me see the parts of you that aren't always easy to show, babii :<
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">our little moments</h2>
+        </div>
+
+        <div class="photo-grid">
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="1787575078122.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              one of those little moments i wish i could keep forever :>
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="IMG_20260715_130932_329.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              just us being us hehe
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="Messenger_creation_5DECDCD6-7F5F-480D-83E3-F9F5CD1E276E.jpg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              somehow, even the random moments become special when it's with you
+            </div>
+          </div>
+
+          <div class="polaroid">
+            <div class="polaroid-img-wrapper">
+              <img src="Messenger_creation_38DCF4B3-7DD4-4A41-911E-9D3C30EB1F41.jpeg" alt="our little memory">
+            </div>
+            <div class="polaroid-caption">
+              another little memory that i'm keeping close to my heart :>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">the little things i never want us to lose</h2>
+        </div>
+
+        <div class="paper-card">
+          i never want us to stop laughing at random things, sending each other nonsense, sharing little stories about our day, or getting excited over the smallest things hehe
+          
+          i never want us to stop asking how each other is doing, even when the answer is just "okay lang"
+          
+          i never want us to stop listening to each other
+          
+          i never want us to stop being gentle with each other, especially during moments when one of us is having a harder day
+          
+          and most of all, i never want us to stop making each other feel like we are worth listening to, worth understanding, and worth choosing :>
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">what you mean to me</h2>
+        </div>
+
+        <div class="special-letter">
+          babii, you mean so much more to me than i can properly put into words
+          
+          you're someone i can laugh with, talk to, yap with, and share little pieces of my day with
+          
+          you're someone whose words actually reach me
+          
+          and i think that's one of the things i appreciate most
+          
+          your efforts don't have to be huge for me to notice them
+          
+          sometimes a simple reassurance, a random message, a little reminder, or just knowing that you're there can mean more than you realize
+          
+          i hope you know that i see those things
+          
+          i appreciate you for them
+          
+          and i appreciate you for simply being you
+        </div>
+      </section>
+
+
+      <section class="scrapbook-section">
+        <div class="section-header">
+          <h2 class="section-title">for us</h2>
+        </div>
+
+        <div class="ending-card">
+
+          <div class="ending-title">for my babii :></div>
+
+          <div class="ending-sub">
+            a little reminder of how much i appreciate you
+          </div>
+
+          <p>
+            if someday we look back at this little website, i hope we smile at how simple everything was
+            <br><br>
+            
+            i hope we remember the random conversations, the laughter, the little misunderstandings we learned from, the moments we made each other feel better, and all the ordinary days that somehow became special because we shared them
+            <br><br>
+            
+            i don't know exactly what every tomorrow will look like, but i know that right now, i'm genuinely grateful that you're here
+            <br><br>
+            
+            thank you for being part of my days, for listening to me, for understanding me, for trusting me, and for letting me know the different sides of you
+            <br><br>
+            
+            i hope we keep growing together without rushing each other, keep learning how to love each other better, and keep choosing kindness even when things get difficult
+            <br><br>
+            
+            and babii, whenever you forget how much you matter, i hope this little place reminds you that someone noticed all those little things about you
+            <br><br>
+            
+            i lovee youu so muchh babiii :>>
+          </p>
+
+        </div>
+
+        <div class="footer-love">
+          always your kakampi :>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script>
+    function openScrapbook() {
+      const cover = document.getElementById("cover-screen");
+      const scrapbook = document.getElementById("main-scrapbook");
+      const audio = document.getElementById("bgMusic");
+      
+      cover.style.display = "none";
+      scrapbook.style.display = "block";
+      
+      setTimeout(() => {
+        scrapbook.style.opacity = "1";
+        audio.play().catch(err => console.log("Auto-play failed:", err));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 50);
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toggleMusic() {
+      const audio = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
+      
+      if (audio.paused) {
+        audio.play();
+        musicToggle.textContent = "🎵";
+      } else {
+        audio.pause();
+        musicToggle.textContent = "🔇";
+      }
+    }
+  </script>
+</body>
+</html>
+  ├── music.mp3 
+  ├── 1787575078122.jpg
+  ├── IMG_20260715_130932_329.jpg
+  ├── Messenger_creation_5DECDCD6-7F5F-480D-83E3-F9F5CD1E276E.jpg
+  └── Messenger_creation_38DCF4B3-7DD4-4A41-911E-9D3C30EB1F41.jpeg
